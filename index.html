@@ -184,8 +184,9 @@
                         <p class="mbr-text mbr-fonts-style mt-3 display-7">企業の広報PRなどでも抜群の効果を発揮します。堅苦しい内容をアニメーションなら感覚的に伝えることができます。</p>
                     </div>
                     <div class="mbr-section-btn item-footer mt-2">
-                        <a href="" class="btn btn-primary item-btn display-7" target="_blank">Read More
-                            &gt;</a>
+                        <button type="button" class="btn btn-primary item-btn display-7" target="_blank" id="checkout-button-price_1IetT5BRoDnKgCJkkQhv4uyO">
+                            購入
+                    　　</button>
                     </div>
                 </div>
             </div>
@@ -634,7 +635,50 @@
     <input name="animation" type="hidden">
 
 
+   <!-- Load Stripe.js on your website. -->
+<script src="https://js.stripe.com/v3"></script>
 
+<!-- Create a button that your customers click to complete their purchase. Customize the styling to suit your branding. -->
+
+
+<div id="error-message"></div>
+
+<script>
+(function() {
+  var stripe = Stripe('pk_test_51IesZ7BRoDnKgCJk3KyEqqjfORVgx026e05RAXbIQtDFmxskJcWuAGa4q3UXkDIkjPYmxfrgcdMwksIVl6ds8k6b00gamrE6hS');
+
+  var checkoutButton = document.getElementById('checkout-button-price_1IetT5BRoDnKgCJkkQhv4uyO');
+  checkoutButton.addEventListener('click', function () {
+    /*
+     * When the customer clicks on the button, redirect
+     * them to Checkout.
+     */
+    stripe.redirectToCheckout({
+      lineItems: [{price: 'price_1IetT5BRoDnKgCJkkQhv4uyO', quantity: 1}],
+      mode: 'payment',
+      /*
+       * Do not rely on the redirect to the successUrl for fulfilling
+       * purchases, customers may not always reach the success_url after
+       * a successful payment.
+       * Instead use one of the strategies described in
+       * https://stripe.com/docs/payments/checkout/fulfill-orders
+       */
+      successUrl: 'https://lifetime-energy.github.io/nomad-coding/success',
+      cancelUrl: 'https://lifetime-energy.github.io/nomad-coding/canceled',
+    })
+    .then(function (result) {
+      if (result.error) {
+        /*
+         * If `redirectToCheckout` fails due to a browser or network
+         * error, display the localized error message to your customer.
+         */
+        var displayError = document.getElementById('error-message');
+        displayError.textContent = result.error.message;
+      }
+    });
+  });
+})();
+</script>
 
   </body>
 </html>
